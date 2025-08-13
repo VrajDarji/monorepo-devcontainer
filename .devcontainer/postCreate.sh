@@ -28,8 +28,15 @@ if [ ! -w /workspace ]; then
     exit 1
 fi
 
+echo -e "${GREEN}Cleaning old dependencies in apps/*...${RESET}"
+for app in apps/*; do
+  if [ -d "$app" ]; then
+    echo "  - $app"
+    rm -rf "$app/node_modules" "$app/package-lock.json" "$app/yarn.lock" "$app/pnpm-lock.yaml"
+  fi
+done
+
 # Always clean up node_modules & lockfiles to avoid host/container mismatch
-echo "Cleaning up old dependencies..."
 rm -rf node_modules package-lock.json yarn.lock pnpm-lock.yaml
 
 # Enable corepack for pnpm/yarn support
@@ -48,15 +55,6 @@ else
 fi
 
 echo "Detected package manager: $PM"
-
-# Check if package.json exists
-if [ ! -f package.json ]; then
-    echo "ERROR: No package.json found in /workspace"
-    echo "Available files:"
-    ls -la
-    exit 1
-fi
-
 
 # Clear npm cache to fix potential issues
 echo "Clearing npm cache..."
@@ -78,14 +76,6 @@ npm config set registry https://registry.npmjs.org/
 echo "Installing workspace dependencies using $PM..."
 echo "This will install dependencies for all apps in the workspace..."
 
-# Add error handling for the install command
-if ! $PM install; then
-    echo "ERROR: $PM install failed"
-    echo "Trying with verbose output:"
-    $PM install --verbose
-    exit 1
-fi
-
 # Verify workspace setup
 if [ -f package.json ]; then
   echo "✓ Root package.json found"
@@ -97,12 +87,30 @@ if [ -f package.json ]; then
   fi
 fi
 
+for app in apps/*; do
+  if [ -f "$app/package.json" ]; then
+    echo "Ensuring $app dependencies..."
+    (cd "$app" && \
+      if [ -f pnpm-lock.yaml ]; then
+        pnpm install
+      elif [ -f yarn.lock ]; then
+        yarn install
+      else
+        npm install
+      fi
+    )
+  fi
+done
+
+
+
 echo "Fixing permissions on node_modules..."
-if [ -d node_modules ]; then
-    sudo chown -R vscode:vscode /workspace || echo "Permission fix failed, but continuing..."
-else
-    echo "No node_modules directory found"
-fi
+for app in apps/*; do
+  if [ -d "$app/node_modules" ]; then
+    sudo chown -R vscode:vscode "$app/node_modules" || echo "Permission fix failed for $app"
+  fi
+done
+
 
 echo "✅ Setup complete."
 echo "Helpful commands:"

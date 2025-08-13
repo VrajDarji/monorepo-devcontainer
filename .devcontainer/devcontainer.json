@@ -16,9 +16,6 @@
   ],
   "postCreateCommand": "bash .devcontainer/postCreate.sh",
   "forwardPorts": [3000, 3001, 5432, 27017],
-  "mounts": [
-    "source=dev_node_modules_frontend,target=/workspace/apps/frontend/node_modules,type=volume",
-    "source=dev_node_modules_backend,target=/workspace/apps/backend/node_modules,type=volume"
-  ],
+  "mounts": [],
   "remoteUser": "vscode"
 }
