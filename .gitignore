@@ -1,0 +1,81 @@
+# ---------------------------
+# Node.js
+# ---------------------------
+**/node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+package-lock.json
+yarn.lock
+pnpm-lock.yaml
+
+# ---------------------------
+# Logs
+# ---------------------------
+logs
+*.log
+*.log.*
+log/
+tmp.log
+
+# ---------------------------
+# Build Output
+# ---------------------------
+dist/
+build/
+.next/
+out/
+coverage/
+
+# ---------------------------
+# Environment Files
+# ---------------------------
+.env
+.env.*.local
+.env.local
+.env.production
+.env.development
+.env.test
+
+# ---------------------------
+# OS Generated
+# ---------------------------
+.DS_Store
+Thumbs.db
+
+# ---------------------------
+# IDE & Editor
+# ---------------------------
+.vscode/
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+
+# ---------------------------
+# Devcontainer
+# ---------------------------
+.devcontainer/.cache/
+.devcontainer/temp/
+.devcontainer/local/
+.devcontainer/volumes/
+
+# ---------------------------
+# Monorepo Specific
+# ---------------------------
+apps/frontend/.next/
+apps/frontend/out/
+apps/frontend/.vercel/
+
+apps/backend/dist/
+apps/backend/coverage/
+
+# Ignore lockfiles in subprojects if managed centrally
+apps/frontend/yarn.lock
+apps/frontend/package-lock.json
+apps/frontend/pnpm-lock.yaml
+apps/backend/yarn.lock
+apps/backend/package-lock.json
+apps/backend/pnpm-lock.yaml

@@ -1,0 +1,24 @@
+{
+  "name": "SWS Monorepo Dev Container (Next + Nest + Postgres + Mongo)",
+  "dockerComposeFile": "docker-compose.yml",
+  "service": "dev",
+  "workspaceFolder": "/workspace",
+  "shutdownAction": "stopCompose",
+  "settings": {
+    "terminal.integrated.shell.linux": "/bin/bash",
+    "editor.formatOnSave": true
+  },
+  "extensions": [
+    "esbenp.prettier-vscode",
+    "dbaeumer.vscode-eslint",
+    "ms-azuretools.vscode-docker",
+    "eamodio.gitlens"
+  ],
+  "postCreateCommand": "bash .devcontainer/postCreate.sh",
+  "forwardPorts": [3000, 3001, 5432, 27017],
+  "mounts": [
+    "source=dev_node_modules_frontend,target=/workspace/apps/frontend/node_modules,type=volume",
+    "source=dev_node_modules_backend,target=/workspace/apps/backend/node_modules,type=volume"
+  ],
+  "remoteUser": "vscode"
+}
