@@ -2,9 +2,25 @@ FROM node:20-bullseye
 
 ENV DEBIAN_FRONTEND=noninteractive
 
+# Install MongoDB GPG key and repository
+RUN curl -fsSL https://pgp.mongodb.com/server-7.0.asc | gpg --dearmor -o /usr/share/keyrings/mongodb-server-7.0.gpg \
+  && echo "deb [ signed-by=/usr/share/keyrings/mongodb-server-7.0.gpg ] http://repo.mongodb.org/apt/debian bullseye/mongodb-org/7.0 main" | tee /etc/apt/sources.list.d/mongodb-org-7.0.list
+
 RUN apt-get update \
   && apt-get install -y --no-install-recommends \
-    git curl build-essential python3 python3-pip libpq-dev postgresql-client openssh-client ca-certificates sudo \
+    git \
+    curl \
+    build-essential \
+    python3 \
+    python3-pip \
+    libpq-dev \
+    postgresql-client \
+    mongodb-mongosh \
+    mongodb-org-tools \
+    redis-tools \
+    openssh-client \
+    ca-certificates \
+    sudo \
   && rm -rf /var/lib/apt/lists/*
 
 # Create vscode user
